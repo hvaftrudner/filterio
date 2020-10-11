@@ -42,8 +42,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
         
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
-        applyIntensityProcessing()
-        applyRadiusProcessing()
+        applyProcessing()
         
     }
 
@@ -78,8 +77,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
         
-        applyIntensityProcessing()
-        applyRadiusProcessing()
+        applyProcessing()
+        
         
     }
     
@@ -96,45 +95,45 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
     }
     
     @IBAction func intensityChanged(_ sender: Any) {
-        applyIntensityProcessing()
-    }
-    
-    @IBAction func radiusChanged(_ sender: Any) {
-        applyRadiusProcessing()
-    }
-    
-    
-    func applyIntensityProcessing(){
         let inputKeys = currentFilter.inputKeys
         
         if inputKeys.contains(kCIInputIntensityKey){
             currentFilter.setValue(intensity.value, forKey: kCIInputIntensityKey)
         }
-        if inputKeys.contains(kCIInputScaleKey){
-            currentFilter.setValue(intensity.value * 10, forKey: kCIInputScaleKey)
-        }
-        
-        guard let outputImage = currentFilter.outputImage else {return}
-        
-        //This line breaks if the filter uses any other input then IntensityKey
-        //currentFilter.setValue(intensity.value, forKey: kCIInputIntensityKey)
-        
-        if let cgImage = context.createCGImage(outputImage, from: outputImage.extent){
-
-            let processImage = UIImage(cgImage: cgImage)
-            imageView.image = processImage
-        }
-        
+        applyProcessing()
     }
-    func applyRadiusProcessing(){
+    
+    @IBAction func radiusChanged(_ sender: Any) {
         let inputKeys = currentFilter.inputKeys
         
         if inputKeys.contains(kCIInputRadiusKey){
             currentFilter.setValue(intensity.value * 200, forKey: kCIInputRadiusKey)
         }
-        if inputKeys.contains(kCIInputCenterKey){
-            currentFilter.setValue(CIVector(x: currentImage.size.width / 2, y: currentImage.size.height / 2), forKey: kCIInputCenterKey)
+        if inputKeys.contains(kCIInputScaleKey){
+            currentFilter.setValue(intensity.value * 10, forKey: kCIInputScaleKey)
         }
+        if inputKeys.contains(kCIInputCenterKey){
+            currentFilter.setValue(CIVector(x: currentImage.size.width / 2, y:currentImage.size.height / 2), forKey: kCIInputCenterKey)
+        }
+        applyProcessing()
+    }
+    
+    
+    func applyProcessing(){
+//        let inputKeys = currentFilter.inputKeys
+        
+//        if inputKeys.contains(kCIInputIntensityKey){
+//            currentFilter.setValue(intensity.value, forKey: kCIInputIntensityKey)
+//        }
+//        if inputKeys.contains(kCIInputScaleKey){
+//            currentFilter.setValue(intensity.value * 10, forKey: kCIInputScaleKey)
+//        }
+//        if inputKeys.contains(kCIInputRadiusKey){
+//            currentFilter.setValue(intensity.value * 200, forKey: kCIInputRadiusKey)
+//        }
+//        if inputKeys.contains(kCIInputCenterKey){
+//            currentFilter.setValue(CIVector(x: currentImage.size.width / 2, y: currentImage.size.height / 2), forKey: kCIInputCenterKey)
+//        }
         
         guard let outputImage = currentFilter.outputImage else {return}
         
