@@ -25,7 +25,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
         
         context = CIContext()
         currentFilter = CIFilter(name: "CISepiaTone")
-        
     }
     
     @objc func importPicture(){
@@ -39,6 +38,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
         guard let image = info[.editedImage] as? UIImage else {return}
         dismiss(animated: true)
         currentImage = image
+        
+        //added fadein animation to imageView
+        self.imageView.alpha = 0.0
+        UIView.animate(withDuration: 2, delay: 0, options: [], animations: {
+            self.imageView.alpha = 1
+        })
         
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
